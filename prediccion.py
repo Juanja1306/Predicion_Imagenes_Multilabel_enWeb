@@ -1,7 +1,7 @@
 from torchvision import datasets, models, transforms
 import torch.nn as nn
 import torch
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 from PIL import Image, ExifTags
 
 class MLC(nn.Module):
@@ -48,11 +48,11 @@ def predict_and_show(image_path, model):
     probs = torch.sigmoid(outputs).cpu().numpy()
     predicted_ids = [index_to_id[i] for i, p in enumerate(probs[0]) if p > 0.5]
     labels = [category_names[cat_id] for cat_id in predicted_ids]
-    plt.figure(figsize=(8, 8))
-    plt.imshow(image)
-    plt.axis('off')
-    plt.title(f"Predicciones: {', '.join(labels)}", fontsize=12)
-    plt.show()
+    # plt.figure(figsize=(8, 8))
+    # plt.imshow(image)
+    # plt.axis('off')
+    # plt.title(f"Predicciones: {', '.join(labels)}", fontsize=12)
+    # plt.show()
     return labels
 
 # Configuraciones adicionales
