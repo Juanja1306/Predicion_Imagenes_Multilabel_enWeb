@@ -11,7 +11,7 @@ class MLC(nn.Module):
         self.resnet = models.resnet18(weights=None).to(self.device)
         self.in_features = self.resnet.fc.in_features
         self.resnet.fc = nn.Linear(self.in_features, num_classes).to(self.device)
-        self.load_model_weights('./backend/recursos/modelo_pesos1.pth')
+        self.load_model_weights(r"C:\Users\juanj\Desktop\Predicion_Imagenes_Multilabel_enWeb\backend\recursos\modelo_pesos1.pth")
 
     def forward(self, x):
         x = self.resnet(x)
@@ -81,9 +81,9 @@ index_to_id =  {
 }
 
 
-# Uso del modelo
-model = MLC(num_classes=78)
-image_path = "C:/Users/juanj/Pictures/fotos/20221130_132637.jpg"
-predicted_labels = predict_and_show(image_path, model)
-print("Etiquetas predichas:")
-print(predicted_labels)
+# # Uso del modelo
+# model = MLC(num_classes=78)
+# image_path = "C:/Users/juanj/Pictures/fotos/20221130_132637.jpg"
+# predicted_labels = predict_and_show(image_path, model)
+# print("Etiquetas predichas:")
+# print(predicted_labels)
