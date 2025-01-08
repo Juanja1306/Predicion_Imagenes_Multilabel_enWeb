@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Predicción de Imágenes</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        #imagePreview {
+            width: 100%;
+            max-height: 300px;
+            object-fit: contain;
+            margin-top: 20px;
+            display: none;
+        }
+        button {
+            padding: 10px 20px;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+        #predictButton {
+            display: none;
+        }
+        .predictions {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Predicción de Objetos en Imagen</h2>
+        
+        <form id="imageForm">
+            <input type="file" id="imageInput" accept="image/*" required>
+            <button type="button" id="uploadButton" onclick="uploadImage()">Explorar</button>
+        </form>
+
+        <img id="imagePreview" src="" alt="Imagen cargada">
+
+        <button id="predictButton" onclick="predictImage()">Predecir</button>
+
+        <div class="predictions" id="predictions"></div>
+    </div>
+
+    <script>
+        // Función para mostrar la imagen cargada en el preview
+        function uploadImage() {
+            const input = document.getElementById('imageInput');
+            const preview = document.getElementById('imagePreview');
+            const predictButton = document.getElementById('predictButton');
+
+            const file = input.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                    predictButton.style.display = 'inline-block';
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // Función para predecir la imagen
+        function predictImage() {
+            const formData = new FormData();
+            const imageInput = document.getElementById('imageInput');
+
+            formData.append('image', imageInput.files[0]);
+
+            fetch('/predict/', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRFToken': getCookie('csrftoken')
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.predictions) {
+                    document.getElementById('predictions').innerHTML = `
+                        <h3>Predicciones:</h3>
+                        <ul>
+                            ${data.predictions.map(label => `<li>${label}</li>`).join('')}
+
+                        </ul>
+                    `;
+                } else {
+                    document.getElementById('predictions').innerText = 'No se pudieron obtener las predicciones.';
+                }
+            })
+            .catch(error => {
+                console.error('Error al predecir la imagen:', error);
+            });
+        }
+
+        // Función para obtener el CSRF Token para las peticiones POST
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+    </script>
+</body>
+</html>

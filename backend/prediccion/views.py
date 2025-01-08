@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 from .prediccion import predict_and_show, MLC
@@ -15,3 +15,6 @@ def predict_image(request):
             return JsonResponse({'predictions': predicted_labels})
         return JsonResponse({'error': 'No image provided'}, status=400)
     return JsonResponse({'error': 'Method not allowed'}, status=405)
+
+def home(request):
+    return render(request, 'front/home.html')
