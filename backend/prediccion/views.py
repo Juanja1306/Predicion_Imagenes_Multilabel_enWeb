@@ -6,6 +6,7 @@ from .prediccion import predict_and_show, MLC
 from rest_framework.decorators import api_view # type: ignore
 from rest_framework.response import Response # type: ignore
 from backend.settings import bucket
+from .models import Historial
 
 from rest_framework import status # type: ignore
 
@@ -18,7 +19,6 @@ def predict_image(request):
         if image_path:
             model = MLC(num_classes=80) 
             predicted_labels = predict_and_show(image_path, model)
-            
             
             # Crear un nuevo registro en el historial
             archivo = request.FILES['archivo']
@@ -39,13 +39,21 @@ def predict_image(request):
             serializer = HistorialSerializer(data=historial_data)
             if serializer.is_valid():
                 serializer.save()
-                return JsonResponse({'predictions': predicted_labels, 'historial': serializer.data}, status=status.HTTP_201_CREATED)
+                return JsonResponse({'predictions': predicted_labels}, status=status.HTTP_201_CREATED)
             else:
                 return JsonResponse({'predictions': predicted_labels, 'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
         return JsonResponse({'error': 'No image provided'}, status=400)
     return JsonResponse({'error': 'Method not allowed'}, status=405)
 
 
+@api_view(['GET'])
+def historial(request):
+    if request.method == 'GET':
+        historial = Historial.objects.all()
+        serializer = HistorialSerializer(historial, many=True)
+        return Response(serializer.data)
+    return Response({'error': 'Method not allowed'}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
+    
 
 
 def home(request):

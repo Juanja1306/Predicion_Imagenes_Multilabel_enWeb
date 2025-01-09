@@ -3,7 +3,7 @@ import datetime
 
 class Historial(models.Model):
     id = models.AutoField(primary_key=True)
-    prediccion = models.CharField(max_length=255)
+    prediccion = models.CharField(max_length=255, blank=True, null=True)
     fecha_subida = models.CharField(max_length=50, blank=True, null=True)
     hora_subida = models.CharField(max_length=50, blank=True, null=True)
     url = models.URLField(max_length=500)
