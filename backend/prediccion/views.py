@@ -1,35 +1,50 @@
+import datetime
 from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 from .prediccion import predict_and_show, MLC
 from rest_framework.decorators import api_view # type: ignore
 from rest_framework.response import Response # type: ignore
+from backend.settings import bucket
 
 from rest_framework import status # type: ignore
 
 from .serializers import HistorialSerializer
 
-@csrf_exempt
+@api_view(['POST'])
 def predict_image(request):
     if request.method == 'POST':
-        image_path = request.FILES.get('image')
+        image_path = request.FILES['archivo']
         if image_path:
-            model = MLC(num_classes=80)  # Aquí podrías cargar el modelo solo una vez al iniciar el servidor en otro escenario
+            model = MLC(num_classes=80) 
             predicted_labels = predict_and_show(image_path, model)
-            return JsonResponse({'predictions': predicted_labels})
+            
+            
+            # Crear un nuevo registro en el historial
+            archivo = request.FILES['archivo']
+            blob_name = archivo.name
+            blob = bucket.blob(blob_name)
+            
+            archivo.file.seek(0)
+            blob.upload_from_file(archivo.file, content_type=archivo.content_type)
+            labels_string = ', '.join(predicted_labels)
+        
+            historial_data = {
+                    'prediccion': str(labels_string),
+                    'fecha_subida': "",
+                    'hora_subida': "",
+                    'url': blob.public_url
+                }
+            
+            serializer = HistorialSerializer(data=historial_data)
+            if serializer.is_valid():
+                serializer.save()
+                return JsonResponse({'predictions': predicted_labels, 'historial': serializer.data}, status=status.HTTP_201_CREATED)
+            else:
+                return JsonResponse({'predictions': predicted_labels, 'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
         return JsonResponse({'error': 'No image provided'}, status=400)
     return JsonResponse({'error': 'Method not allowed'}, status=405)
 
-
-@api_view(['POST'])
-def upload(request):
-    if request.method == 'POST':
-        serializer = HistorialSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
 
 
 

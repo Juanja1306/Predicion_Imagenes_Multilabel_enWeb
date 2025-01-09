@@ -8,7 +8,6 @@ from prediccion import views
 
 urlpatterns = [
     path('', views.home, name='home'),
-    path('ingreso/', views.upload, name='upload'),
     path('admin/', admin.site.urls),
     path('predict/', predict_image, name='predict_image'),
 ]
