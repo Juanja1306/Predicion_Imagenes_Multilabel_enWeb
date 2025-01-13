@@ -11,7 +11,7 @@ class MLC(nn.Module):
         self.resnet = models.resnet50(weights=None).to(self.device)
         self.in_features = self.resnet.fc.in_features
         self.resnet.fc = nn.Linear(self.in_features, num_classes).to(self.device)
-        self.load_model_weights(r"C:\Users\juanj\Desktop\Predicion_Imagenes_Multilabel_enWeb\backend\recursos\modelo_pesos_todas_imagenes.pth")
+        self.load_model_weights(r"/home/estebanmarquez2702/Predicion_Imagenes_Multilabel_enWeb/backend/recursos/modelo_pesos_todas_imagenes.pth")
 
     def forward(self, x):
         x = self.resnet(x)

@@ -8,10 +8,10 @@ from tensorflow.keras.preprocessing.image import load_img, img_to_array #type: i
 from tensorflow.keras.applications.resnet50 import preprocess_input #type: ignore
 from tensorflow.keras.optimizers import Adam #type: ignore
 
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = r"C:\\Users\\juanj\\Desktop\\testPrueba\\inspiring-bonus-445203-p0-de2bd3223728.json"
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = r"/home/estebanmarquez2702/Predicion_Imagenes_Multilabel_enWeb/backend/recursos/inspiring-bonus-445203-p0-de2bd3223728.json"
 
 class Modelo:
-    def __init__(self, model_path=r"C:\Users\juanj\Desktop\Predicion_Imagenes_Multilabel_enWeb\backend\recursos\optimized_updated_resnet50_model.h5"):
+    def __init__(self, model_path=r"/home/estebanmarquez2702/Predicion_Imagenes_Multilabel_enWeb/backend/recursos/optimized_updated_resnet50_model.h5"):
         self.model_path = model_path
         self.model = None
         self.category_names = ['person', 'bicycle', 'car', 'motorcycle', 'airplane', 'bus', 'train', 'truck', 
