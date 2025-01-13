@@ -5,6 +5,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from prediccion.views import predict_image 
 from prediccion.views import historial
+from prediccion.views import predicion
 from prediccion import views
 
 urlpatterns = [
@@ -12,4 +13,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('predict/', predict_image, name='predict_image'),
     path('historial/', views.historial, name='historial'),
+    path('prediccion/', views.predicion, name='predicion'),
 ]
