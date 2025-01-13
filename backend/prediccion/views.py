@@ -66,10 +66,9 @@ def predicion(request):
             
         archivo.file.seek(0)
         blob.upload_from_file(archivo.file, content_type=archivo.content_type)
-        labels_string = ', '.join(predictions_str)
     
         historial_data = {
-                'prediccion': str(labels_string),
+                'prediccion': str(predictions_str),
                 'fecha_subida': "",
                 'hora_subida': "",
                 'url': blob.public_url
