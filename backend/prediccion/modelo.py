@@ -42,6 +42,10 @@ class Modelo:
         image_stream.seek(0)
         image = PilImage.open(image_stream)
 
+        # Asegurarse de que la imagen es RGB
+        if image.mode != 'RGB':
+            image = image.convert('RGB')
+
         # Redimensionar y convertir la imagen para que sea compatible con el modelo
         image = image.resize(target_size)
         img_array = img_to_array(image)
