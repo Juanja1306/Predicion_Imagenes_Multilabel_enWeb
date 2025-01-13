@@ -42,17 +42,14 @@ def adjust_image_orientation(image):
 def predict_and_show(image_path, model):
     image = Image.open(image_path)
     image = adjust_image_orientation(image)
+    image = image.convert('RGB')
     image_transformed = transform(image).unsqueeze(0).to(model.device)
     with torch.no_grad():
         outputs = model(image_transformed)
     probs = torch.sigmoid(outputs).cpu().numpy()
     predicted_ids = [index_to_id[i] for i, p in enumerate(probs[0]) if p > 0.5]
     labels = [category_names[cat_id] for cat_id in predicted_ids]
-    # plt.figure(figsize=(8, 8))
-    # plt.imshow(image)
-    # plt.axis('off')
-    # plt.title(f"Predicciones: {', '.join(labels)}", fontsize=12)
-    # plt.show()
+   
     return labels
 
 # Configuraciones adicionales
