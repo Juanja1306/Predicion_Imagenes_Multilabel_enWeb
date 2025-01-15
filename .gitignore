@@ -86,8 +86,8 @@ target/
 celerybeat-schedule
 
 # dotenv
-.env
-.venv/
+# .env
+# .venv/
 
 second-flame-445518-b4-6b445a75ac67.json
 
