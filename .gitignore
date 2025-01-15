@@ -1,4 +1,4 @@
-.venv/
+
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -87,6 +87,7 @@ celerybeat-schedule
 
 # dotenv
 .env
+.venv/
 
 second-flame-445518-b4-6b445a75ac67.json
 
