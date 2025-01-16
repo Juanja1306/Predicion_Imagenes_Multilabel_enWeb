@@ -88,6 +88,7 @@ celerybeat-schedule
 # dotenv
 .env
 .venv/
+mi_entorno
 
 second-flame-445518-b4-6b445a75ac67.json
 

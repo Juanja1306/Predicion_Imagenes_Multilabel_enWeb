@@ -33,7 +33,7 @@ INSTALLED_APPS += ['storages']
 
 GS_BUCKET_NAME = 'b-ia'  # Nombre del bucket de Google Cloud Storage
 GS_CREDENTIALS = service_account.Credentials.from_service_account_file(
-    r"/home/elprimooficial3/Predicion_Imagenes_Multilabel_enWeb/backend/recursos/second-flame-445518-b4-6b445a75ac67.json"
+    r"C:\Users\juanj\Desktop\Predicion_Imagenes_Multilabel_enWeb\backend\recursos\second-flame-445518-b4-6b445a75ac67.json"
 ) 
 
 
